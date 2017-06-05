@@ -1,0 +1,25 @@
+{
+  "name": "atyantik/trustytribe",
+  "license": "MIT",
+  "keywords": [
+    "trustytribe"
+  ],
+  "version": "dev-master",
+  "description": "Trustytribe Api",
+  "authors": [
+    {
+      "name": "Chirag Patel",
+      "email": "chiragpatel@atyantik.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "require-dev": {},
+  "autoload": {
+    "psr-4": {
+      "Atyantik\\Trustytribe\\": "src"
+    }
+  },
+  "minimum-stability": "dev"
+}
