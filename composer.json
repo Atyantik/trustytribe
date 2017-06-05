@@ -14,7 +14,7 @@
   ],
   "require": {
     "php": ">=5.5.9",
-    "guzzlehttp/guzzle": "^6.2@dev"
+    "guzzlehttp/guzzle": "^6.*"
   },
   "require-dev": {},
   "autoload": {
