@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 
 class TrustyTribeManager
 {
+    const API_URL = 'https://beta-api.trustytribe.com/';
     protected $privateKey;
     protected $publicKey;
     protected $client;
@@ -29,19 +30,24 @@ class TrustyTribeManager
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
 
-        $this->client = new Client(['base_uri' => 'https://beta-api.trustytribe.com/']);
+        $this->client = new Client(['base_uri' => self::API_URL]);
         $this->header = [
-            'header' =>[
-                'Authorization' => $this->publicKey . '::' . $this->privateKey
+            'header' => [
+                'Authorization' => $this->generateAuturozationKey()
             ]
         ];
+    }
+
+    private function generateAuturozationKey()
+    {
+        return $this->publicKey . '::' . $this->privateKey;
     }
 
     public function getProductReview($productId = null)
     {
         if (isset($productId)) {
             try {
-                $result = $this->client->request('GET', 'product/' . $productId . '/review', $this->header);
+                $result = $this->client->request('GET', "product/$productId/review");
                 return json_decode($result);
             } catch (\Exception $e) {
                 return $e->getMessage();
