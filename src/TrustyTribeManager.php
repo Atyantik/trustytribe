@@ -16,6 +16,8 @@ class TrustyTribeManager
     protected $privateKey;
     protected $publicKey;
     protected $client;
+    protected $header;
+    const BASE_URL = "https://beta-api.trustytribe.com/";
 
     public function __construct($privateKey, $publicKey)
     {
@@ -29,23 +31,24 @@ class TrustyTribeManager
         $this->publicKey = $publicKey;
 
         $this->client = new Client();
+        $this->header = [
+            'header' =>
+                [
+                    'Authorization' => [
+                        'public_api_key' => $this->publicKey,
+                        'private_api_key' => $this->privateKey
+                    ]
+                ]
+        ];
     }
 
     public function getProductReview($productId = null)
     {
         if (isset($productId)) {
             try {
-                $result = $this->client->request('GET', 'https://beta-api.trustytribe.com/product/' . $productId . '/review', [
-                    'headers' => [
-                        'public_api_key' => $this->publicKey,
-                        'private_api_key' => $this->privateKey
-                    ]
-                ]);
-
+                $result = $this->client->request('GET', self::BASE_URL . 'product/' . $productId . '/review', $this->header);
                 return json_decode($result);
-
             } catch (\Exception $e) {
-
                 return $e->getMessage();
             }
         }
