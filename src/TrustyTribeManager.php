@@ -31,13 +31,9 @@ class TrustyTribeManager
 
         $this->client = new Client(['base_uri' => 'https://beta-api.trustytribe.com/']);
         $this->header = [
-            'header' =>
-                [
-                    'Authorization' => [
-                        'public_api_key' => $this->publicKey,
-                        'private_api_key' => $this->privateKey
-                    ]
-                ]
+            'header' =>[
+                'Authorization' => $this->publicKey . ':#:' . $this->privateKey
+            ]
         ];
     }
 
