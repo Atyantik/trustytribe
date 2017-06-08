@@ -55,4 +55,17 @@ class TrustyTribeManager
         }
         throw new \Exception('Please provide product id');
     }
+
+    public function getProductAggregateReview($productId = null)
+    {
+        if (isset($productId)) {
+            try {
+                $result = $this->client->request('GET', "product/$productId/aggregate-review");
+                return json_decode($result);
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        throw new \Exception('Please provide product id');
+    }
 }
