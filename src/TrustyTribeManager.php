@@ -48,7 +48,7 @@ class TrustyTribeManager
         if (isset($productId)) {
             try {
                 $result = $this->client->request('GET', "product/$productId/review");
-                return json_decode($result);
+                return json_decode($result->getBody()->getContents());
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -61,7 +61,7 @@ class TrustyTribeManager
         if (isset($productId)) {
             try {
                 $result = $this->client->request('GET', "product/$productId/aggregate-review");
-                return json_decode($result);
+                return json_decode($result->getBody()->getContents());
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
