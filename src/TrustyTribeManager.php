@@ -30,7 +30,7 @@ class TrustyTribeManager
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
 
-        $this->client = new Client(['base_uri' => self::API_URL,'headers' => [
+        $this->client = new Client(['base_uri' => self::API_URL, 'headers' => [
             'Authorization' => $this->generateAuturozationKey()
         ]]);
     }
@@ -53,10 +53,20 @@ class TrustyTribeManager
         throw new \Exception('Please provide product id');
     }
 
-    public function getReviews()
+    public function getReviews($reviewStatus = null, $productId = null, $startReview = null, $endReview = null, $perPage = null, $sortBy = null, $sortOn = null)
     {
         try {
-            $result = $this->client->request('GET', "review~:(reviewStatus,productId,startReview,endReview,perPage,sortBy,sortOn)");
+            $result = $this->client->request('GET', "review", [
+                'query' => [
+                    'reviewStatus' => $reviewStatus,
+                    'productId' => $productId,
+                    'startReview' => $startReview,
+                    'endReview' => $endReview,
+                    'perPage' => $perPage,
+                    'sortBy' => $sortBy,
+                    'sortOn' => $sortOn
+                ]
+            ]);
             return json_decode($result->getBody()->getContents(), true);
         } catch (\Exception $e) {
             return $e->getMessage();
