@@ -21,6 +21,5 @@
     "psr-4": {
       "Atyantik\\Trustytribe\\": "src"
     }
-  },
-  "minimum-stability": "dev"
+  }
 }
