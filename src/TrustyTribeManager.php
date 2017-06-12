@@ -40,19 +40,6 @@ class TrustyTribeManager
         return $this->publicKey . '::' . $this->privateKey;
     }
 
-    public function getProductReview($productId = null)
-    {
-        if (isset($productId)) {
-            try {
-                $result = $this->client->request('GET', "product/$productId/review");
-                return json_decode($result->getBody()->getContents(), true);
-            } catch (\Exception $e) {
-                return $e->getMessage();
-            }
-        }
-        throw new \Exception('Please provide product id');
-    }
-
     public function getProductAggregateReview($productId = null)
     {
         if (isset($productId)) {
@@ -64,5 +51,15 @@ class TrustyTribeManager
             }
         }
         throw new \Exception('Please provide product id');
+    }
+
+    public function getReviews()
+    {
+        try {
+            $result = $this->client->request('GET', "review~:(reviewStatus,productId,startReview,endReview,perPage,sortBy,sortOn)");
+            return json_decode($result->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
