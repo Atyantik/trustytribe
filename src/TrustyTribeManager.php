@@ -19,7 +19,7 @@ class TrustyTribeManager
     protected $client;
     protected $header;
 
-    public function __construct($privateKey, $publicKey)
+    public function __construct($publicKey, $privateKey)
     {
         if ($privateKey === null || $privateKey === '') {
             throw new \Exception("Please provide PrivateKey For API");
@@ -30,12 +30,9 @@ class TrustyTribeManager
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
 
-        $this->client = new Client(['base_uri' => self::API_URL]);
-        $this->header = [
-            'header' => [
-                'Authorization' => $this->generateAuturozationKey()
-            ]
-        ];
+        $this->client = new Client(['base_uri' => self::API_URL,'headers' => [
+            'Authorization' => $this->generateAuturozationKey()
+        ]]);
     }
 
     private function generateAuturozationKey()
@@ -48,7 +45,7 @@ class TrustyTribeManager
         if (isset($productId)) {
             try {
                 $result = $this->client->request('GET', "product/$productId/review");
-                return json_decode($result->getBody()->getContents());
+                return json_decode($result->getBody()->getContents(), true);
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -61,7 +58,7 @@ class TrustyTribeManager
         if (isset($productId)) {
             try {
                 $result = $this->client->request('GET', "product/$productId/aggregate-review");
-                return json_decode($result->getBody()->getContents());
+                return json_decode($result->getBody()->getContents(), true);
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
