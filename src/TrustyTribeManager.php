@@ -53,19 +53,11 @@ class TrustyTribeManager
         throw new \Exception('Please provide product id');
     }
 
-    public function getReviews($productId = null, $reviewStatus = null, $startReview = null, $endReview = null, $perPage = null, $sortBy = null, $sortOn = null)
+    public function getReviews($filters = [])
     {
         try {
             $result = $this->client->request('GET', "review", [
-                'query' => [
-                    'productId' => $productId,
-                    'reviewStatus' => $reviewStatus,
-                    'startReview' => $startReview,
-                    'endReview' => $endReview,
-                    'perPage' => $perPage,
-                    'sortBy' => $sortBy,
-                    'sortOn' => $sortOn
-                ]
+                'query' => $filters
             ]);
             return json_decode($result->getBody()->getContents(), true);
         } catch (\Exception $e) {
