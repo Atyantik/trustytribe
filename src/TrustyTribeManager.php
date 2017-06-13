@@ -64,4 +64,16 @@ class TrustyTribeManager
             return $e->getMessage();
         }
     }
+
+    public function getAggregatedReviews($filters = [])
+    {
+        try {
+            $result = $this->client->request('GET', "review/aggregated-reviews", [
+                'query' => $filters
+            ]);
+            return json_decode($result->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
