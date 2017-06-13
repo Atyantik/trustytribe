@@ -13,13 +13,14 @@ use GuzzleHttp\Client;
 
 class TrustyTribeManager
 {
-    const API_URL = 'https://beta-api.trustytribe.com/';
+    const SANDBOX_API_URL = 'https://beta-api.trustytribe.com/';
+    const LIVE_API_URL = 'https://api.trustytribe.com/';
     protected $privateKey;
     protected $publicKey;
     protected $client;
     protected $header;
 
-    public function __construct($publicKey, $privateKey)
+    public function __construct($publicKey, $privateKey, $sandBox = true)
     {
         if ($privateKey === null || $privateKey === '') {
             throw new \Exception("Please provide PrivateKey For API");
@@ -29,8 +30,11 @@ class TrustyTribeManager
         }
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
-
-        $this->client = new Client(['base_uri' => self::API_URL, 'headers' => [
+        $baseUrl = self::LIVE_API_URL;
+        if ($sandBox === true) {
+            $baseUrl = self::SANDBOX_API_URL;
+        }
+        $this->client = new Client(['base_uri' => $baseUrl, 'headers' => [
             'Authorization' => $this->generateAuturozationKey()
         ]]);
     }
