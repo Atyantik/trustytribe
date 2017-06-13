@@ -19,7 +19,7 @@ class TrustyTribeManager
     protected $client;
     protected $header;
 
-    public function __construct($privateKey, $publicKey)
+    public function __construct($publicKey, $privateKey)
     {
         if ($privateKey === null || $privateKey === '') {
             throw new \Exception("Please provide PrivateKey For API");
@@ -30,12 +30,9 @@ class TrustyTribeManager
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
 
-        $this->client = new Client(['base_uri' => self::API_URL]);
-        $this->header = [
-            'header' => [
-                'Authorization' => $this->generateAuturozationKey()
-            ]
-        ];
+        $this->client = new Client(['base_uri' => self::API_URL, 'headers' => [
+            'Authorization' => $this->generateAuturozationKey()
+        ]]);
     }
 
     private function generateAuturozationKey()
@@ -43,12 +40,12 @@ class TrustyTribeManager
         return $this->publicKey . '::' . $this->privateKey;
     }
 
-    public function getProductReview($productId = null)
+    public function getProductAggregateReview($productId = null)
     {
         if (isset($productId)) {
             try {
-                $result = $this->client->request('GET', "product/$productId/review");
-                return json_decode($result->getBody()->getContents());
+                $result = $this->client->request('GET', "product/$productId/aggregate-review");
+                return json_decode($result->getBody()->getContents(), true);
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -56,16 +53,15 @@ class TrustyTribeManager
         throw new \Exception('Please provide product id');
     }
 
-    public function getProductAggregateReview($productId = null)
+    public function getReviews($filters = [])
     {
-        if (isset($productId)) {
-            try {
-                $result = $this->client->request('GET', "product/$productId/aggregate-review");
-                return json_decode($result->getBody()->getContents());
-            } catch (\Exception $e) {
-                return $e->getMessage();
-            }
+        try {
+            $result = $this->client->request('GET', "review", [
+                'query' => $filters
+            ]);
+            return json_decode($result->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
-        throw new \Exception('Please provide product id');
     }
 }
