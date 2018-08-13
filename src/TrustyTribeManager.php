@@ -35,13 +35,28 @@ class TrustyTribeManager
             $baseUrl = self::SANDBOX_API_URL;
         }
         $this->client = new Client(['base_uri' => $baseUrl, 'headers' => [
-            'Authorization' => $this->generateAuturozationKey()
+            'Authorization' => $this->generateAuthorizationKey()
         ]]);
     }
 
-    private function generateAuturozationKey()
+    private function generateAuthorizationKey()
     {
         return $this->publicKey . '::' . $this->privateKey;
+    }
+
+    public function getProductReviews($productId = null, $filters = [])
+    {
+        if (!$productId) {
+            throw new \Exception('Please provide product id');
+        }
+        try {
+            $result = $this->client->request('GET', "product/$productId/review", [
+                'query' => $filters
+            ]);
+            return json_decode($result->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function getProductAggregateReview($productId = null)
